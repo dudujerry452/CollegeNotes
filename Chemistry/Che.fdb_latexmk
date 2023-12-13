@@ -1,12 +1,12 @@
 # Fdb version 4
-["xdvipdfmx"] 1702469886 "Che.xdv" "Che.pdf" "Che" 1702469887 0
-  "Che.xdv" 1702469886 73180 2b591ed58156e91d05356a7247788985 "xelatex"
+["xdvipdfmx"] 1702474450 "Che.xdv" "Che.pdf" "Che" 1702474451 0
+  "Che.xdv" 1702474450 73424 187824f3821eeff3286a141e15dacff9 "xelatex"
   (generated)
   "Che.pdf"
   (rewritten before read)
-["xelatex"] 1702469882 "Che.tex" "Che.xdv" "Che" 1702469887 0
-  "Che.aux" 1702469886 2085 2d33b30c8444ddbf416201343d951787 "xelatex"
-  "Che.tex" 1702469880 11609 392d2b796f7e4bfa4a8b99491706a5d4 ""
+["xelatex"] 1702474446 "Che.tex" "Che.xdv" "Che" 1702474451 0
+  "Che.aux" 1702474450 2085 2d33b30c8444ddbf416201343d951787 "xelatex"
+  "Che.tex" 1702474444 11646 73cab8ad3876fdafc452b2f3770c309f ""
   "c:/Windows/Fonts/msyh.ttc" 1689416897 19701556 07c864a5b15e68fa47639738197fae38 ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1702298382 1004 54797486969f23fa377b128694d548df ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmex10.tfm" 1702298434 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
