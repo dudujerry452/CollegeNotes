@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.12.11)  13 DEC 2023 21:34
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.12.12)  13 DEC 2023 21:41
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -6,7 +6,7 @@ entering extended mode
 **Che.tex
 (./Che.tex
 LaTeX2e <2023-11-01>
-L3 programming layer <2023-12-08>
+L3 programming layer <2023-12-11>
 (c:/texlive/2023/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
 (c:/texlive/2023/texmf-dist/tex/latex/base/size10.clo
@@ -26,7 +26,7 @@ File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
 ) (c:/texlive/2023/texmf-dist/tex/latex/mhchem/mhchem.sty
 Package: mhchem 2021/12/31 v4.09 for typesetting chemical formulae
  (c:/texlive/2023/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2023-12-08 L3 programming layer (loader) 
+Package: expl3 2023-12-11 L3 programming layer (loader) 
  (c:/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
 File: l3backend-xetex.def 2023-11-09 L3 backend support: XeTeX
 \g__graphics_track_int=\count191
@@ -496,7 +496,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 297--298
 
  []
 
-[7] (./Che.aux)
+[7] [8] (./Che.aux)
  ***********
 LaTeX2e <2023-11-01>
 L3 programming layer <2022/07/14>
@@ -511,12 +511,12 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 8925 strings out of 476345
- 243589 string characters out of 5794000
- 1946122 words of memory out of 5000000
- 30834 multiletter control sequences out of 15000+600000
+ 8925 strings out of 476349
+ 243589 string characters out of 5794101
+ 1946109 words of memory out of 5000000
+ 30830 multiletter control sequences out of 15000+600000
  561537 words of font info for 73 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  93i,18n,97p,363b,566s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on Che.xdv (7 pages, 73424 bytes).
+Output written on Che.xdv (8 pages, 73764 bytes).
