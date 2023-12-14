@@ -1,12 +1,12 @@
 # Fdb version 4
-["xdvipdfmx"] 1702474896 "Che.xdv" "Che.pdf" "Che" 1702474897 0
-  "Che.xdv" 1702474896 73764 53eb367e854c9ec613c852966870fc7e "xelatex"
+["xdvipdfmx"] 1702517466 "Che.xdv" "Che.pdf" "Che" 1702517467 0
+  "Che.xdv" 1702517466 96584 e0d697d932104d645fe3cd1db94def69 "xelatex"
   (generated)
   "Che.pdf"
   (rewritten before read)
-["xelatex"] 1702474882 "Che.tex" "Che.xdv" "Che" 1702474897 0
-  "Che.aux" 1702474896 2085 996f2515e25af3179752bb9365f2e586 "xelatex"
-  "Che.tex" 1702474832 11682 441bff92ef2e57114de2045fcaa48b90 ""
+["xelatex"] 1702517448 "Che.tex" "Che.xdv" "Che" 1702517467 0
+  "Che.aux" 1702517466 2238 39b10a802f6ad50acc61a7b77832892b "xelatex"
+  "Che.tex" 1702517330 14617 2788c9a0e737317f809d91bf563e2c3e ""
   "c:/Windows/Fonts/msyh.ttc" 1693444190 19701556 07c864a5b15e68fa47639738197fae38 ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1702373971 1004 54797486969f23fa377b128694d548df ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmex10.tfm" 1702374016 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
@@ -29,14 +29,16 @@
   "c:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/CJKfntef.sty" 1702387643 12851 25a9b5cc006609feb5c9a20ce24a5392 ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/config/ctex-name-utf8.cfg" 1702387646 1770 50e40a993c4c5ea72af9155aff7e605c ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/config/ctex.cfg" 1702387646 1230 140911b70e325208170dc573931e772d ""
+  "c:/texlive/2023/texmf-dist/tex/latex/ctex/config/ctexbackend.cfg" 1702387646 1904 e0018b8e661c6b3e37f6e4a53f472d74 ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/config/ctexopts.cfg" 1702387646 1291 feb9a19ff907013e8b3014895a284585 ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/ctex-c5size.clo" 1702387646 2616 55a2684e4d887e5ce92d91108f2a8ed3 ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/ctex.sty" 1702387646 32650 ae1549373401d5cdb1fa16e45ec2f2c3 ""
+  "c:/texlive/2023/texmf-dist/tex/latex/ctex/ctexart.cls" 1702387646 55219 69f0e9646f7b8e2f2ed4c5f3eef59f5c ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/ctexhook.sty" 1702387646 6505 33157acfddefdd8fd513e2308e07a435 ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/ctexpatch.sty" 1702387646 8448 194e901f66d106236c72ef098b091d00 ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/engine/ctex-engine-xetex.def" 1702387646 4760 0d5b13f0f595d738e80c6aea423c7997 ""
   "c:/texlive/2023/texmf-dist/tex/latex/ctex/fontset/ctex-fontset-windows.def" 1702387646 4952 f781dcade04ad6ae6d09fde004a752be ""
-  "c:/texlive/2023/texmf-dist/tex/latex/ctex/scheme/ctex-scheme-chinese.def" 1702387646 2309 6d7454f886152e0f183b87105f3b3adf ""
+  "c:/texlive/2023/texmf-dist/tex/latex/ctex/scheme/ctex-scheme-chinese-article.def" 1702387646 4622 4f152431881516d2a81822d98108b61f ""
   "c:/texlive/2023/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty" 1702374071 162076 2f6d31c4632f2730c57b9c0fda038e15 ""
   "c:/texlive/2023/texmf-dist/tex/latex/fontspec/fontspec.cfg" 1702374071 549 c4adac819276241fea8eb79c5ab7b99e ""
   "c:/texlive/2023/texmf-dist/tex/latex/fontspec/fontspec.sty" 1702374071 1656 7e824878bad4df5a3e8bba4e463d9126 ""
@@ -44,6 +46,7 @@
   "c:/texlive/2023/texmf-dist/tex/latex/graphics-cfg/graphics.cfg" 1702374081 1224 978390e9c2234eab29404bc21b268d1e ""
   "c:/texlive/2023/texmf-dist/tex/latex/graphics-def/xetex.def" 1702374082 14788 1dde73f396dd97d88c838bee2a352abe ""
   "c:/texlive/2023/texmf-dist/tex/latex/graphics/graphics.sty" 1702374080 18387 8f900a490197ebaf93c02ae9476d4b09 ""
+  "c:/texlive/2023/texmf-dist/tex/latex/graphics/graphicx.sty" 1702374080 8010 a8d949cbdbc5c983593827c9eec252e1 ""
   "c:/texlive/2023/texmf-dist/tex/latex/graphics/keyval.sty" 1702374080 2671 7e67d78d9b88c845599a85b2d41f2e39 ""
   "c:/texlive/2023/texmf-dist/tex/latex/graphics/trig.sty" 1702374080 4023 293ea1c16429fc0c4cf605f4da1791a9 ""
   "c:/texlive/2023/texmf-dist/tex/latex/hyperref/hyperref.sty" 1702374089 220895 6ca6b57b8bf00b1b056e6f2806b9ff68 ""
@@ -54,7 +57,6 @@
   "c:/texlive/2023/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty" 1702374122 49660 5c0feaa99f26b13a04a462a06cf3a294 ""
   "c:/texlive/2023/texmf-dist/tex/latex/mhchem/mhchem.sty" 1702387740 133877 e74a3594a37b21d6547a1e9494929337 ""
   "c:/texlive/2023/texmf-dist/tex/latex/tools/calc.sty" 1702374291 10214 547fd4d29642cb7c80bf54b49d447f01 ""
-  "c:/texlive/2023/texmf-dist/tex/latex/tools/indentfirst.sty" 1702374291 1618 c5f08dcf49a56107311a81073b35fa4e ""
   "c:/texlive/2023/texmf-dist/tex/latex/zhnumber/zhnumber-utf8.cfg" 1702387683 5700 603e2f09dad175efabc8594730623a0b ""
   "c:/texlive/2023/texmf-dist/tex/latex/zhnumber/zhnumber.sty" 1702387683 38160 aafa8d740e4f21b62a4acd4835e54359 ""
   "c:/texlive/2023/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg" 1702387679 408 7369c27beaa819c5f46de3795b22ee3e ""
@@ -63,6 +65,7 @@
   "c:/texlive/2023/texmf-dist/web2c/texmf.cnf" 1702373959 41009 84b61f42d16d06bedb915f57aa2374cf ""
   "c:/texlive/2023/texmf-var/web2c/xetex/xelatex.fmt" 1702374354 10026167 3929ff46a83561f35fba6f01fd7dbc04 ""
   "c:/texlive/2023/texmf.cnf" 1702374332 713 e69b156964470283e0530f5060668171 ""
+  "figure//Cu结构.png" 1702514023 11721 e7b367577119bd744ea1d632ccb2fdb7 ""
   (generated)
   "Che.aux"
   "Che.log"
