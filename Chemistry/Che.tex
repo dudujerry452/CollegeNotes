@@ -1,15 +1,15 @@
 % !TEX program = xelatex
-\documentclass[a4paper,UTF8]{article}
+\documentclass[a4paper,UTF8]{ctexart}
 \usepackage[version=4]{mhchem}
-\usepackage{ctex}
+\usepackage[UTF8]{ctex}
 \usepackage{fontspec}
 \usepackage{geometry}
+\usepackage{graphicx}
 \setmainfont{SimSun}
 \setlength{\parindent}{0em}
 \geometry{textwidth=15cm}
 \geometry{hcentering}
 \begin{document}
-
 \begin{center}
 {\huge 我的化学笔记}
 \end{center}
@@ -288,7 +288,7 @@ $$ \ce{4CuO ->[1000^\circ C] 2Cu2O + O2} $$
 
 \ce{Cu(OH)2}:
 
-\ce{Cu(OH)2}显两性（以弱碱性为主），既溶于酸也溶于浓强碱，生成四羟基合铜离子。
+\ce{Cu(OH)2}显两性（以弱碱性为主），既溶于酸也溶于浓强碱，在强碱中生成四羟基合铜离子。
 
 \ce{[Cu(OH)4]2-}可被葡萄糖还原为暗红色的\ce{Cu2O}
 
@@ -316,10 +316,87 @@ $$ \ce{Cu2O + 4NH3 + H2O -> [Cu(NH3)2]^{+} + 2OH-} $$
 
 但\ce{[Cu(NH3)2]^{+}}遇到空气就被氧化为深蓝色\ce{[Cu(NH3)4]^{2+}}
 
-$$ \ce{4[Cu(NH3)2]^{+} + O2 + 8NH3 + 2H2O -> 4[Cu(NH3)4]^{2+} + 4OH-} $$
+$$ \ce{4[Cu(NH3)2]^{+} + O2 + 8NH3 + 2H2O -> 4[Cu(NH3)4]^{2+} + 4OH-} $$\\
 
-\ce{Cu2O}可用作红色颜料。
+\ce{[Cu(NH3)2]OAc}可以吸收\ce{CO}。
 
-\ce{FeO}可以做黑色染料。
+$$ \ce{[Cu(NH3)2]OAc + CO + NH3 <=>[\text{低温加压}][\text{升温减压}] [Cu(CO)(NH3)3]OAc} $$
+
+\ce{Cu2O}可用作红色颜料。\\
+
+2.盐类
+
+(1)氯化亚铜
+
+向热的浓盐酸中用铜还原\ce{CuCl2}可以生成无色\ce{[CuCl2]-}配合物，用水稀释即可生成白色\ce{CuCl}沉淀。
+
+$$ \ce{Cu + Cu^{2+} + 4Cl- -> 2[CuCl2]-} $$
+
+$$ \ce{2[CuCl2]- -> 2CuCl + 2Cl-} $$
+
+用还原剂\ce{SnCl2}也可以得到\ce{CuCl}。
+
+$$ \ce{2CuCl2 + SnCl2 -> 2CuCl\ce{v} + SnCl4} $$
+
+另外，\ce{CuCl}还可以吸收\ce{CO}生成氯化羰基亚铜(\ce{[Cu(CO)Cl]\cdot H2O})
+
+$$ \ce{CuCl + CO + H2O -> [Cu(CO)Cl]\cdot H2O} $$
+
+该反应可用于测定有机反应中\ce{CO}的产生量。
+
+(2)氯化铜
+
+\ce{CuCl2}是一种棕黄色固体，可由单质直接化合而成，是一种共价化合物，结构为\ce{CuCl4}组成的长链。
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.3\textwidth]{figure//Cu结构.png}
+	\caption{Cu结构.png}
+	\label{fig:Cu结构}
+\end{figure}
+
+\ce{CuCl2}不仅易溶于水，而且易溶于有机溶剂，如乙醇，丙酮等。在很高浓度\ce{CuCl2}溶液中，可形成黄色配合物\ce{[CuCl4]^{2-}}，显黄色。
+
+$$ \ce{Cu^{2+} + 4Cl- -> [CuCl4]^{2-}} $$
+
+在\ce{CuCl2}稀溶液中，由于被\ce{[Cu(H2O)4]^{2+}}取代，显浅蓝色。
+
+$$ \ce{[CuCl4]^{2-} + 4H2O -> [Cu(H2O)4]^{2+} + 4Cl-} $$
+
+所以，\ce{CuCl2}高浓度溶液常显黄色或黄绿色，这是两种配离子都存在的缘故。
+
+(3)硫酸铜
+
+无水硫酸铜为白色粉末，在水中结晶时为五水合硫酸铜，呈蓝色。五水合硫酸铜(\ce{[Cu(H2O)5]SO4})俗称胆巩，其结构为\ce{[Cu(H2O)4]SO4\cdot H2O}，4个水分子与\ce{Cu^{2+}}配位，1个水分子通过氢键与\ce{SO4^{2-}}结合。温度升高，水逐渐脱去。
+
+无水硫酸铜易溶于水，吸水性强，吸水则显出特征性蓝色，可用于测量气体微量水分和作为干燥剂。\ce{CuSO4}由于铜离子水解而呈弱酸性。
+
+\ce{CuSO4}具有杀菌性，可制备波尔多液。\\
+
+3.配合物
+
+(1)\ce{Cu}(I)的配合物：
+
+\ce{Cu}(I)通常形成配位数为2的配合物，常见的有：
+
+\ce{[Cu(SCN)2]+}，\ce{[CuCl2]-}，\ce{[Cu(NH3)2]+}，\ce{[Cu(S2O3)]^{2-}}，\ce{[Cu(CN)2]-}
+
+由于\ce{Cu+}的价电子结构为$d^{10}$型，形成的配离子基本无色，大多配合物溶液有吸收\ce{CO}、烯烃、炔烃和释放的能力。
+
+$$ \ce{[Cu(NH2CH2CH2OH)2]+ + C2H4 <=> [Cu(NH2CH2CH2OH)2(C2H4)]+} \Delta _{f}H^{\Theta}_{m}<0$$
+
+该反应常用于石油中分离烯烃。
+
+(2)\ce{Cu}(II)的配合物：
+
+\ce{Cu}(II)与单齿配体通常形成配位数为4的正方形配合物，例如\ce{[CuCl4]2-}，\ce{[Cu(NH3)4]^{2+}}，\ce{[Cu(H2O)4]^{2+}}。
+
+过量氨水与\ce{Cu^{2+}}盐溶液反应可以生成\ce{[Cu(NH3)4]^{2+}}。
+
+$$ \ce{[Cu(H2O)4]^{2+} + 4NH3 -> [Cu(NH3)4]^{2+} + 4H2O} $$
+
+
+
+
 
 \end{document}
