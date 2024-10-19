@@ -1,0 +1,306 @@
+\documentclass{article}        % 您的输入文件必须包含这两行
+\usepackage{ctex}              % 添加对中文的支持
+\begin{document}           % 以及文档末尾的 \end{document} 命令。
+ 
+\section{temp }
+
+\subsection{关系代数}
+
+过程化查询语言：\\ 
+
+6种基本运算：
+
+- 选择 $\sigma$ 
+
+- 投影 $\Pi$
+
+- 联合 $\bigcup$
+
+- 集合差 $-$ 
+
+- 笛卡尔积 $\times $
+
+- 更名 $\rho$
+
+\subsubsection{投影运算}
+
+- 表达形式: $\Pi_{A_1,A_2,...,A_k}(r) $ 
+
+其中$A_1,A_2$是属性名，r是关系名 
+
+- 结果是只包含列表中属性的关系 
+
+- 因为关系是集合， 重复的行均被去除 
+
+\subsubsection{选择运算}
+
+- 表达形式：
+$ \sigma_p (r) $ ,
+$p$是选择谓词 
+
+- 定义:
+$ \sigma_p (r) = \{t | t \in r \ and \  p(t) \} $
+
+其中p可以是由and($\wedge$) or($\vee$) not($\neg$) 连接的多个谓词组成的命题表达式，
+每一个谓词的表达形式为
+
+<属性> op <属性> or <常量> 
+
+op为比较运算符，包括$=, \neq, >, \le, <, \ge $
+
+例如，$\sigma_{dept_name='Physics'}(instructor) $
+
+\subsubsection{并运算}
+
+表达形式: $r\cup s$
+
+定义：$r\cup s = \{ t|t \in r \ or \  t\in s \} $ 
+
+要使$r\cup s$有意义，则需要：
+
+- r,s必须是同元的，即属性数目必须相同
+
+- 属性的域必须是兼容的（如：r关系的第二列与s关系的第二列的值域类型相同）
+
+例：找出2009年秋季或2010年春季的课程
+
+$ \Pi_{course\_id}(\sigma_{semester="Fall" \wedge year=2009}(section)) \cup  
+  \Pi_{course\_id}(\sigma_{semester="Spring" \wedge year=2010(section)}) $
+
+\subsubsection{集合差运算}
+
+表达形式：$r - s$ 
+
+定义：$ r - s = \{ t | t \in \ and \ t \notin s \} $
+
+集合差必须在相容的关系间运行
+
+- r,s 必须是同元的（属性数目必须相同）
+
+- 属性的域必须是兼容的
+
+例：找出2009年秋季学期开，但不在2010春季学期开的课程
+
+\subsubsection{交运算}
+
+表达形式: $r \cap s$
+
+定义： $r \cap s = \{ t|t \in r \ and \  t \in s \} $
+
+集合的交运算必须在相容的关系间运行（同集合的差运算）
+
+可转化为: $ r \cap s = r - (r-s) $
+
+\subsubsection{笛卡尔积运算}
+
+表达形式： $r \times s $
+
+定义：$r \times s = \{ t\ q|t \in r \ and\ q \in s\} $
+
+设关系r(R)与关系s(S)的属性是不同的，即($R \cup S = \emptyset$) 
+
+否则，需要命名机制加以解决
+
+\subsubsection{更名运算}
+
+允许我们命名或重新指定代数表达式/关系的名字 
+
+表达形式: $\rho_x(E) $返回E的名字x 
+
+若E是n元的，则 
+
+$ \rho_{x(A_1,A_2,...,A_n)}(E) $ 
+
+\subsubsection{关系运算的组合}
+
+关系运算的结果仍为关系，因此多个关系表达式可以组合为一个关系代数表达式 
+
+例如,
+
+$\Pi_{name}(\sigma_{dept_name='Physics'}(instructor)) $
+
+\subsection{附加的关系代数运算}
+
+\subsubsection{自然连接}
+
+自然连接运算： $ r \bowtie s $
+
+定义：
+$ r\bowtie s = \Pi_{R\cup S}(\sigma_{r.A_1=s.A_1\wedge r.A_2=s.A_2 ... \wedge r.A_n=s.A_n}(r\times s))$
+
+例如 $ \Pi_{name,course_id}(instructor\bowtie teaches)$ 
+
+其中$R\cap S = {A_1,A_2,...,A_n}$, R, S, 表示属性的集合；
+若$R\cap S = \emptyset$，则 $r\bowtie s = r \times s$
+
+\subsubsection{赋值运算}
+
+临时关系变量$ \leftarrow $ 关系代数表达式 
+
+将右侧的表达式结果赋值给左侧的临时关系变量 
+
+例如$ r \bowtie s$ 等价于 
+
+$ temp1 \leftarrow r \times s $ 
+
+$ temp2 \leftarrow \sigma_{r.A_1 \ wedge} $ 
+
+// TODO 
+
+\subsubsection{外连接}
+
+外连接(outer-join)运算：对自然连接的扩充 
+
+1）左外连接（符号：$\bowtie$左侧两端点加两条水平短线）
+
+左侧表的元组全保留，左侧与右侧表不匹配的用null填充 
+
+$(r\bowtie s)\cup (r-\Pi_R(r\bowtie s)\times(null,...,null))$，
+其中常数关系$(null,...,null)$的模式是S-R
+
+2）右外连接（符号同，但是方向相反） 
+
+与左侧对应 
+
+3）全外连接 
+
+左侧右侧的元组全部保留，不匹配的用null填充
+
+$(r\bowtie s)\cup (r-\Pi_R(r\bowtie s)\times(null,...,null)) \cup (s-\Pi_S(r\bowtie s))\times (null,...,null)$，
+
+\subsubsection{广义投影}
+
+- 表达形式：$\Pi_{F1,F2,...,Fn}(E) $
+
+- Fn是涉及到常量和属性的算术表达式 
+
+- 表达式as属性名 
+
+例如，${Pi_{name,age+1 as virtual\_age}(student)}$
+
+\subsubsection{聚集}
+
+例如, 
+$g_{avg(grade)}(选课)$ 
+结果：avg(grade) = 86.5
+
+例如，
+求数学的最高成绩
+$g_{max(grade)}(\sigma_{course\_name='math}(courses\bowtie takes)) $
+
+- 分组聚集 
+
+$_{group1, group2, ..., group k}g_{avg(grade)}(student)$ 
+
+分别返回k个组中学生平均成绩
+
+\section{元组关系演算}
+
+- 元组关系演算(Tuple Relational Calculus) 
+
+非过程化查询语言
+
+- 表达形式
+
+$ \{t | P(T) \} $ 使谓词P为真的元组t的集合 
+
+例1: 找出所有工资在8000以上的教师的ID, name, dept\_name, salary 
+
+$ \{ t| t\in instructor \wedge t[salary]>8000 \} $
+
+\subsection{存在两次和蕴含结构}
+
+- 谓词中的存在结构：$\exists$ 存在量词
+
+- $\exists t \in r(Q(t)) \equiv 关系r中存在元组t使谓词Qt(t)为真 $ 
+
+例2: 找出所有工资在8000以上的教师ID（单个属性） \\
+
+$ \{\ t \ |\  \exists \  s \in instructor(t[ID]=s[ID] \wedge s[salary] > 8000)\ \} $
+
+例3: 找出位置在Watson楼中系的所有教师姓名（涉及两个关系） 
+
+$ \{t | s \in instructor(t[name]=s[name] \ \wedge \ \exists \ u \in department(u[dept\_ name] = s[dept\_name] \wedge u[building]='Watson'))\} $ \\ 
+
+例4: 找出2009年秋季或者2010年春季学期，或者这两个学期都开设的所有课程的id集合 
+
+$ \{ t| \exists s \in section(t[course\_id]=s[course\_id] \wedge s[semeseter]='Fall' \wedge s[year]=2009) 
+\vee \exists u \in section(u[course\_id]=t[course\_id] \wedge u[semeseter]='Spring' \wedge u[year]=2010)\} $
+
+
+- 谓词中的蕴含结构: $\Rightarrow$ 
+
+$P \Rightarrow Q$, 即“如果P为真，则Q必为真“ 
+
+真值表：
+
+\begin{table}[htbp]
+    \centering 
+    \caption{蕴含的真值表}
+
+    \begin{tabular}{|c|c|c|}
+        \hline 
+        P&Q&$P\rightarrow Q$\\ 
+        \hline 
+        T&T&T \\
+        \hline
+        T&T&F \\
+        \hline
+        F&T&T \\
+        \hline
+        F&F&T \\
+        \hline
+    \end{tabular}
+\end{table} 
+
+\subsection{所有结构}
+
+- 谓词汇总的所有结构, $\forall$  
+
+$ \forall t \in r(Q(t)) \equiv $对关系r中满足谓词Q(t)的所有元组 
+
+例如,找出那些选了生物系全部课程的学生ID，涉及三个表 
+
+$ t | \exists r \in student(r[ID] = t[ID] \wedge \forall u \in course(u[dept_name]='Biology) \Rightarrow \exists s \in takes(t[ID] = s[ID] \wedge s[course\_id]=u[course\_id])) $
+
+
+\subsection{元组关系演算中的等价性}
+
+- 等价性 
+
+1.$P_1 \wedge P_2$ 等价于 $\neg(\neg(P_1)\vee \neg(P_2)) $ 
+
+2.$\forall t \in r(P(t))$ 等价于 $\neg \exists t \in r(\neg P(t)) $  全称量词等价
+
+3. $P_1 \rightarrow P_2$ 等价于 $\neg(P_1)\vee P_2 $ 蕴含等价 
+
+\subsection{元组关系演算中的安全性}
+
+任何可能会产生无限关系的表达式是不安全的 
+
+- 公式P的域，计作dom(P)。P所引用的\textbf{所有值}的集合 
+
+它包括在P中出现在P中的所有关系内的每个值以及提到的所有值的集合 
+
+例如，
+
+$ dom(t \in instructor \wedge t[salary]>8000) $ 
+
+是包括8000和出现在instructor中的所有值的集合
+
+$dom(\neg(t\in instructor)) $  是instructor的所有值
+
+\section{域关系演算}
+
+域关系演算使用从属性域中取值的域变量，是与元组关系演算能力等价的关系演算 
+
+表达方法: ${<a_1,a_2,a_3,...,a_n>|w(o_1,o_2,..,o_k)}$其中w为谓词构成的集合
+
+
+
+
+
+\end{document}     
+
+
+

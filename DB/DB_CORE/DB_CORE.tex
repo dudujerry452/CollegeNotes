@@ -1,0 +1,158 @@
+\documentclass{article}        % 您的输入文件必须包含这两行
+\usepackage{ctex}              % 添加对中文的支持
+\begin{document}           % 以及文档末尾的 \end{document} 命令。
+ 
+\title{数据库内核}
+
+\section{文件组织}
+
+数据库是文件的集合，文件是记录的集合，记录是字段的集合 
+
+数据库=\{文件\}，文件=\{记录\}，记录=\{字段\}
+
+\subsection{定长记录}
+
+\subsubsection{简单方法} 
+
+记录i从字节n*(i-1)开始存储，其中n是记录大小，记录存取简单，
+但记录可能跨块
+
+- 删除记录 
+
+\subsubsection{自由（空闲）链表}
+
+在文件头中存储第一条被删记录的地址 
+
+在第一条被删记录中存储第二条被删记录的地址 以此类推
+
+这些存储的地址可视为指针，因为它们指向记录的位置 
+
+\subsection{变长记录}
+
+例如，TEXT，Book等长度不定的字段
+
+实现：
+
+- 使用分隔符
+
+- 使用字符串存储
+
+\subsubsection{变长记录的实现}
+
+- 定长按照顺序存储
+
+- 变长的属性用定长单元实现(offset, length)来表示 
+实际属性存储在所有定长属性的后面
+
+- 空值用空值位图(null-value bitmap)来表示 
+
+\begin{table}[htbp]
+  \centering
+  \caption{变长数据的存储方式}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline 
+    21,5&26,10&36,10&65000&0000&10101&Srinivasan&comp.Sci. \\
+    \hline
+    4 bytes&4 bytes&4 bytes& 4 bytes&null bitmap&5 byte& 10 byte& 10 byte \\
+  \end{tabular}
+\end{table}
+
+\subsubsection{变长记录varchar与char*}
+
+vaarchar和char在内存中的缓冲区里都是以完整的长度（即定义的最大长度）
+来存放的，不足部分用填补字符来补充。仅仅是存放到磁盘上时，才会以压缩算法处理后存放 
+
+存放到磁盘上时，对于varchar(n)，可能有两种存放方式：
+
+- 第一个byte（有可能是两个，即varchar最大长度超过是256）不存放实际数据，而是存放length。
+接下来存放<=n个的实际字符
+
+- 先存放<n个byte的实际字符，然后用一个不可显示的字符来标志该字段结束 
+
+\subsubsection{变长记录的表示}
+
+变长记录的表示有字节串形式和定长形式两种 
+
+- 字节串形式 Bte string representation 
+
+- 定长形式 Fixed length\\ 
+
+1.尾标志法 
+
+把每个记录看成是连续的字符串，然后再每个记录的尾部附加
+“记录尾标志符“，标明记录结束 
+
+2.记录长度法
+
+在记录的开头添加该记录的长度 
+
+\subsubsection{分槽的页结构}
+
+每块的开始设置一个块首部 
+
+Slotted page header contains： 文件头存储 
+
+- number of record entries 记录个数 
+
+- end of free space in the block 空闲空间尾部 
+
+- location and size of each recored 每个记录维护和大小的数组
+
+实际记录从块的末尾处开始在块中连续分配空间
+
+\begin{table}[htbp]
+  \centering
+  \caption{分槽的单块中的结构}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline 
+    文件头File header&...&....&---Free Space---&Record1&Recored2&...&Recordn(block end) \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsubsection{变长的定长实现}
+
+用大定长装作是变长，使用 
+
+保留空间 Reserved space - 暂时不用的空着\\ 
+
+但是有通过指针方法提高效率：
+
+借用定长管理变长(?)
+
+- 1 anchor lock 记录链上的第一个记录
+
+- 2 overflow block 记录非第一个记录
+
+\subsection{存储大对象}
+
+数据库通常要存储比磁盘块大的数据 
+
+- 如，blob或者clob
+
+许多数据库内部限制一条记录的规模不能比一个块的规模更大
+
+解决方案：大对象可以：
+
+- 存储为文件系统中的文件 
+
+- 存储为由数据库管理的文件 
+
+- 分成小块在分离的关系中的不同的元组
+
+TOAST超尺寸属性存储技术（烤面包？） 
+
+\subsection{文件中记录的组织}
+
+- 堆Heap文件组织  
+
+一条记录可以存放在文件中的任何地方 只要哪个地方有空
+
+记录没有顺序 插入策略：无锋堆后，有缝插针 \\ 
+
+- 多标聚簇
+
+\end{document}     
+
+
+

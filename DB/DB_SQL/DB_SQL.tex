@@ -1,0 +1,1256 @@
+\documentclass{article}        % 您的输入文件必须包含这两行
+\usepackage{ctex}              % 添加对中文的支持
+\begin{document}               % 以及文档末尾的 \end{document} 命令。
+ 
+\section{SQL命令}
+
+\subsection{查询结构}
+
+基本结构
+
+\begin{verbatim}
+select 列名
+    from 表名
+    where 条件表达式
+\end{verbatim}
+
+产生一个关系作为结果，其中from中引用的表之间使用笛卡尔积连接
+
+示例：给出所有女同学的姓名：
+
+\begin{verbatim}
+    select SNAME from S where SSEX = '女'
+\end{verbatim}
+
+详细结构
+\begin{verbatim}
+select [ALL | DISTINCT] <列名>
+[, <列名> ] ...
+from <表名> [, <表名> ] ...
+[where <行条件表达式>]
+[group by <列名> [, <列名> ] ...]
+[having <条件表达式>]
+[order by <列名> [asc | desc] ...]
+\end{verbatim}
+
+工作过程：
+
+1.读取from子句的表或视图做笛卡尔积
+
+2.where子句找出满足条件表达式的元组
+
+3.按group by子句指定列名分组，值相等的元素为一组，
+每个组产生结果表中的一条记录。可在没每组中与聚集函数；
+若group子句带having，则只有满足条件的组才被输出
+
+4.按select子句中给出的列名或表达式求值输出
+
+5.order by子句对输出结果排序
+
+\subsubsection{其他运算符}
+
+where: 
+
+- <, <=, =, <>或!=
+
+- and, or, not
+
+集合:
+
+- union, intersect, except
+
+集合成员资格：
+
+- in, not in
+
+谓词:
+
+- exists, not exists, all, some, unique, between ... and ..., not between ... and ..., 
+like, not like, is null ... 
+
+聚集函数:
+
+- avg, min ,max, sum, count ... 
+
+\subsubsection{重复函数的处理}
+
+语法：默认为保留重复元组，也可以用all指定。
+若要去掉重复元组，可用distinct指明。
+
+\subsubsection{from子句}
+
+from子句列出查询需要访问的关系列表
+
+当目标属性取自多个关系时，不混淆则可以不用显式指明来自哪个关系
+
+\subsubsection{自然连接}
+
+- from table1 natural join table2 
+
+自然连接将参与连接的表相同的列名合并，其余属性跟随相同的列排布 
+
+
+\subsection{分组聚集}
+
+分组命令
+
+\begin{verbatim}
+group by 列名 [having 条件表达式]:
+\end{verbatim}
+
+按照列的值分组，对每个组别进行聚集运算
+
+\begin{verbatim}
+having
+\end{verbatim}
+
+则对分组进行选择
+
+
+示例1:
+
+\begin{verbatim}
+select DNO, max(SAL), min(SAL)
+from PROF 
+group by DNO
+\end{verbatim}
+
+根据部门编号分组，对每个部门，求出最大工资和最小工资
+
+示例2:
+
+列出2009年讲授的每个课程段,至少有两名学生选课的总学分平均值
+
+\begin{verbatim}
+select course_id, sec_id, semeseter, year, avg(tot_cred)
+    from takes natural join student
+    where year = 2009
+    group by course_id, sec_id, semeseter, year
+    having count(ID) >= 2
+\end{verbatim}
+
+\subsection{嵌套子查询}
+
+\subsubsection{集合成员资格}
+
+\textbf{连接词in测试元组是否是集合中的成员}
+
+\begin{verbatim}
+select *
+from S 
+where SNAME in('张红', '王军')
+\end{verbatim}
+
+同理，使用not in测试元组不在集合中
+
+\textbf{in子查询}
+
+判断表达式的值是不是在子查询的结果集合中
+
+例如
+
+\begin{verbatim}
+select SNO,SNAME
+from S
+where SNO in 
+        (select SNO
+        from SC 
+        where CNO = '001'
+        )
+\end{verbatim}
+选修了001号课程的学生的学号及姓名
+
+再例如筛选同一张表的多个条件，此时用其他方法十分麻烦
+
+\begin{verbatim}
+select SNO,SNAME
+from S
+where CNO = '001'
+and SNO in 
+        (select SNO
+        from SC 
+        where CNO = '002'
+        )
+\end{verbatim}
+选修了001号且选了002号课程的学生的学号及姓名
+
+也可以与集合成员资格判断一起使用
+
+\begin{verbatim}
+select count(distinct SNO)
+from takes
+where(coutse_id, sec_id, semester, year) in
+        (select coutse_id, sec_id, semester, year
+        from teaches
+        where ID = '10101'
+        )
+\end{verbatim}
+
+此代码可以找出选修了10101号老师的课的不同的学生总数。
+
+\subsubsection{集合的比较}
+
+结构：
+
+- 表达式 比较运算符 $\theta$ some(子查询)
+
+意思是，表达式的值至少与子查询结果中的一个值相比满足比较运算符$\theta$
+
+注意， =some 等价于 in, 但 !=some 不等价于 not in
+
+- 表达式 比较运算符 $\theta$ all(子查询)
+
+相似地，表达式的值与子查询结果中的所有值相比都满足比较运算符$\theta$
+
+注意， !=all 等价于 not in, 但 =all 不等价于 in
+
+\textbf{注意，集合的比较在可读性上比笛卡尔积优越，如如下例子}
+
+\begin{verbatim} 
+select distinct T.name 
+from instructor T, instructor S
+where T.salary > S.salary
+and S.dept_name = 'Biology'
+\end{verbatim}
+
+可以改写为
+
+\begin{verbatim}
+select distinct name 
+from instructor T 
+where salary > some(
+                select salary 
+                from instructor S
+                where S.dept_name = 'Biology'
+                )
+\end{verbatim}
+
+选出工资大于生物系某个老师工资的老师的名字; \\
+
+也可以进一步对聚集运算的结果操作：
+
+\begin{verbatim} 
+select SNO 
+from SC 
+group by SNO 
+having avg(GRADE) >= all 
+            (select avg(GRADE) 
+            from SC 
+            group by SNO)
+\end{verbatim}
+
+选出平均成绩大于所有学生平均成绩的学生学号
+
+\subsubsection{空关系测试}
+
+- [not] exists (子查询)
+
+判段子查询的结果集合中是否有任何元组存在
+
+注意：
+
+\textbf{
+in后的子查询与外层查询无关，每个子查询执行一次，
+而exists后的子查询与外层查询有关，
+使用了来自外层的相关查询名称，会执行多次
+}
+
+并且，exists子查询的名称只能来源于子查询和其父查询
+
+例如，
+
+- 列出2009年秋季和2010春季同时开课的所有课程id
+
+\begin{verbatim}
+select distinct course_id 
+from section 
+where semester = 'Fall' and year = 2009 and 
+    course_id in ( select course_id
+                from section
+                where semester = 'Spring' and year = 2010
+                );
+\end{verbatim} 
+
+可以改写为
+
+\begin{verbatim}
+select distinct course_id 
+from section S1
+where semester = 'Fall' and year = 2009 and 
+    exists (select *
+            from section S2
+            where semester = 'Spring' and year = 2010
+            and S1.course_id = S2.course_id
+            );
+\end{verbatim} 
+
+\textbf{集合包含测试}
+
+- 若关系A包含关系B（A为B的超集）， 则 
+
+    not exists (B [except/minus] A)  
+
+- 对B except A 
+
+    可以表达在B中存在， 在A中不存在的记录
+
+    若B是A的子集，则B exceot A结果为空集 则not exists (B except A) 为真
+
+例子：
+
+列出选修了Biology系开设的所有课程的学生id，姓名 
+
+\begin{verbatim} 
+select S.ID, S.name 
+from student S  
+where not exists  
+    (
+        (select course_id 
+        from course 
+        where dept_name = 'Biology' )
+        except 
+        (
+        select T.course_id 
+        from takes as T 
+        where S.ID = T.ID
+        )
+    )
+\end{verbatim} 
+
+思路：对于生物系开设的所有课程，对于每个学生，减去每个学生修的课，
+如果结果为空，说明生物系的所有课是该学生的课的子集，即该学生选修了生物系的所有课\\ 
+
+列出选修了所有课程的学生名
+
+\begin{verbatim}  
+select SNAME from S 
+where not exists ( 
+    select CNO from course 
+    where not exists( 
+        select * from SC 
+        where SC.SNO = S.SNO and SC.CNO = course.CNO
+    )
+)
+\end{verbatim}
+
+思路：对于每一个学生，检查所有课程，若不存在这样一门课——不属于该学生选课的课程不存在，
+那么该学生选修了所有课程
+
+
+
+
+\subsubsection{重复元素存在性检测}
+
+- [not] unique (子查询) 
+
+若子查询中没有重复的元素（不存在的元素也算没有重复）则为真 \\
+
+例子:
+
+列出2017年最多开设一次的所有课程
+
+\begin{verbatim} 
+select T.course_id 
+from course as T 
+where unique 
+    (select R.course_id 
+    from section as R 
+    where T.course_id = R.course_id 
+    and R.year = 2017 )
+\end{verbatim}
+
+思路，对于每一个课程，检查该课程号在学期表中是否唯一，
+值的注意的是一次都没开unique也算为真
+
+等价代码：
+
+\begin{verbatim} 
+select T.course_id  
+from course as T 
+where 1 >= (
+    select count(R.course_id) 
+    from section as R 
+    where T.course_id = R.course_id and 
+    R.year = 2017
+)
+\end{verbatim}
+
+\subsubsection{from子句中的子查询}
+
+- (子查询) as 关系名 [列名, 列名 ...] 
+
+将子查询的结果作为新的表运算\\ 
+
+示例：找出平均成绩及格的学生
+
+思路： 
+
+(1)求出每个学生平均成绩 
+
+(2)再从中找出及格的学生（替换having子句）
+
+\textbf{(1)求出每个学生平均成绩的子查询表达}
+\begin{verbatim} 
+select SNAME,avg(GRADE) 
+from S, SC 
+where S.SNO = SC.SNO 
+group by SNAME 
+\end{verbatim}
+
+\textbf{(2) 找出及格的学生}
+
+\begin{verbatim} 
+select SNAME, AVG_GRADE 
+from ( 
+    select SNAME, avg(GRADE) 
+    from S, SC 
+    where SC.SNO  = S.SNO 
+    group by SC.SNO, SNAME 
+) as result(SNAME, AVG_GRADE) 
+where AVG_GRADE >= 60; 
+\end{verbatim}
+
+\subsection{with子句}
+
+with子句提供定义临时关系的方法。
+
+定义仅对包含with子句的查询有效
+
+- 例子：找出最大预算值的系 
+
+\begin{verbatim} 
+with max_budget(value) as 
+    (select max(budget) 
+    from department) 
+select dept_name, budget 
+from department, max_budget 
+where department.budget = max_budget.value;
+\end{verbatim}
+
+思路：先准备部门的最大预算，再筛选出这个最大预算值的部门 \\ 
+
+例子：
+
+查出所有工资总和大与所有系工资总额平均值的系
+
+\begin{verbatim}  
+with dept_total (dept_name, value) as 
+    (select dept_name, sum(salary)
+    from instructor 
+    group by dept_name), 
+
+    dept_total_avg(value) as 
+    (select avg(value)
+    from dept_total)
+
+select dept_name 
+from dept_total, dept_total_avg 
+where dept_total.value >= dept_total_avg.value;
+\end{verbatim}
+
+思路：先求出每个系的工资总额，再求出所有系的工资总额的平均值，最后筛选出工资总额大于平均值的系
+我认为，这样的写法十分优雅，而且很有条理，可读性好。
+
+\subsubsection{标量子查询}
+
+- 值返回单个属性的子查询，可出现在任意要求单个值的表达式中，
+如select。 
+
+例如，
+
+\begin{verbatim}
+select dept_name, 
+    (select count(*)
+    from instructor 
+    where department.dept_name = instructor.dept_name) 
+    as num_instructors 
+from department;
+\end{verbatim}
+
+思路：对于每一个部门，先计算出教师总数，再直接输出
+
+\subsection{插入操作}
+
+插入操作可以使用VALUES，也可以使用子查询
+
+\begin{verbatim}
+    insert into [table name] 
+        values([值, ] ...)
+\end{verbatim}
+
+\begin{verbatim}
+    insert into [table name] ([列名, ] ...) 
+        values([值, ] ...)
+\end{verbatim}
+
+\subsection{删除操作}
+
+删除PROF中的所有元组
+
+\begin{verbatim}
+    delete from PROF
+\end{verbatim}
+
+删除王明老师所有的任课记录
+
+\begin{verbatim}
+    delete from PC 
+    where PNO in(
+        select PNO from PROF 
+        where NAME = '王明'
+    )
+\end{verbatim}
+
+\subsection{更新操作}
+
+所有老师工资上调5\% 
+\begin{verbatim}
+    update instructor 
+    set salary = salary*1.05
+\end{verbatim}
+
+将系主任的工资改为系平均工资 
+\begin{verbatim}
+    update PROF 
+    set SAL = (select acg(SAL) 
+                from PROF 
+                where DNO = D01)
+    where PNO(select DEAN 
+                from DEPT 
+                where DNO = D01)
+\end{verbatim}
+
+对工资超过100000的涨3\%，其余的涨5\%的工资
+\begin{verbatim}
+    update instructor 
+    set salary = salary * 1.03 
+    where salary > 100000
+
+    update instructor 
+    set salary = salary * 1.05
+    where salary <= 100000
+\end{verbatim}
+
+注意命令顺序不能颠倒
+
+\subsubsection{case更新操作}
+
+语法格式:
+
+\begin{verbatim}
+    case 
+        when pred1 then result1 
+        when pred2 then result2 
+        ... 
+        when predn then resultn
+        else result0
+    end
+\end{verbatim}
+
+上一个示例可以改为：
+\begin{verbatim}
+    update instructor 
+    set salary = case 
+            when salary > 100000 then salary = salary * 1.03 
+            else salary = salary * 1.05
+\end{verbatim}
+
+把student中每个tot\_cred属性设为学生成功学完所有课程成绩既不是F也不是空的学分总和
+
+\begin{verbatim}
+    update student S 
+    set tot_cred = (
+        select sum(credits)
+        from takes natural join course 
+        where S.ID = takes.ID 
+        and takes.grade <> 'F' 
+        and takes.grade is not null
+    )   
+\end{verbatim}
+
+添加要求：没学完任何课程的学生学分为0
+\begin{verbatim}
+    update student S 
+    set tot_cred = (
+        select case
+        when sum(credits) is not null then sum(credit) 
+        else 0
+        from takes natural join course 
+        where S.ID = takes.ID 
+        and takes.grade <> 'F' 
+        and takes.grade is not null
+    )
+\end{verbatim}
+
+\subsection{连接表达式}
+
+自然连接：
+
+结果的公共属性上取值相等，且只出现一次
+
+join ... using (A1, A2 ... )
+
+结果的公共属性子集(A1, A2 ... )取值相等，且只出现一次 
+
+join ... on <谓词> 
+
+结果的公共属性满足谓词的要求，且出现两次
+
+\subsubsection{内连接和外连接}
+
+内连接：只返回参与运算的两个表的匹配的部分
+
+外连接：在内连接分基础上，加上左侧或右侧不匹配的部分（匹配内容为空的）
+
+左外连接(left outer join) / 右外连接(right outer join) : 如上 
+
+例如:
+
+与该表连接
+
+\begin{table}[htbp]
+    \begin{minipage}{0.49\linewidth}
+        \centering 
+        \label{example1}
+        \begin{tabular}{|c|c|}
+            \hline 
+            id&name \\
+            \hline 
+            1&Bob \\ 
+            \hline 
+            2&Alice \\ 
+            \hline 
+            3&King \\
+            \hline
+        \end{tabular}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.49\linewidth}
+        \centering 
+        \label{example2}
+        \begin{tabular}{|c|c|}
+            \hline 
+            name&age  \\
+            \hline 
+            Bob & 22  \\ 
+            \hline 
+            Alice & 23  \\ 
+            \hline 
+            Jerry & 24\\
+            \hline
+        \end{tabular}
+    \end{minipage}
+\end{table}
+
+内连接的效果为：
+
+\begin{table}[htbp]
+    \centering
+    \label{example01}
+    \begin{tabular}{|c|c|c|}
+        \hline 
+        id&name&age \\ 
+        \hline 
+        1&Bob&22 \\
+        \hline 
+        2&Alice&23 \\ 
+        \hline 
+    \end{tabular}
+\end{table}
+
+左外连接的效果为
+
+\begin{table}[htbp]
+    \centering
+    \label{example02}
+    \begin{tabular}{|c|c|c|}
+        \hline 
+        id&name&age \\ 
+        \hline 
+        1&Bob&22 \\
+        \hline 
+        2&Alice&23 \\ 
+        \hline 
+        3&King&null \\ 
+        \hline 
+    \end{tabular}
+\end{table}
+
+右外连接的效果为
+
+\begin{table}[htbp]
+    \centering
+    \label{example03}
+    \begin{tabular}{|c|c|c|}
+        \hline 
+        id&name&age \\ 
+        \hline 
+        1&Bob&22 \\
+        \hline 
+        2&Alice&23 \\ 
+        \hline 
+        null&Jerry&24 \\ 
+        \hline 
+    \end{tabular}
+\end{table}
+
+全外连接的效果为
+
+\begin{table}[htbp]
+    \centering
+    \label{example04}
+    \caption{全外连接}
+    \begin{tabular}{|c|c|c|}
+        \hline 
+        id&name&age \\ 
+        \hline 
+        1&Bob&22 \\
+        \hline 
+        2&Alice&23 \\ 
+        \hline 
+        3&King&null \\ 
+        \hline 
+        null&Jerry&24 \\ 
+        \hline 
+    \end{tabular}
+\end{table}
+
+\subsection{视图}
+
+作为虚关系，对用户可见的关系
+
+定义：
+
+\begin{verbatim}
+    create view view_name[(列名[,列名]....)]
+        as (查询表达式)
+\end{verbatim}
+
+视图的属性名缺省为子查询结果中的属性名，可以显示指明
+
+删除视图
+
+\begin{verbatim}
+    drop view view_name
+\end{verbatim}
+
+视图在逻辑分层中的位置
+
+\begin{table}[htbp]
+    \centering
+    \label{example001}
+    \caption{视图的逻辑分层}
+    \begin{tabular}{|c|c|}
+        \hline 
+        外模式&view\\ 
+        \hline 
+        模式&logic \\ 
+        \hline 
+        内模式&physics \\ 
+        \hline 
+    \end{tabular}
+\end{table}
+
+\subsubsection{物化视图}
+
+某些DBS允许存储视图，但保证如果定义视图的实际关系改变，视图也跟着改变。
+
+\subsubsection{视图更新}
+
+称视图是可更新的，当且仅当
+
+- from子句中仅有一个数据库关系
+
+- select只包含关系属性名，不包含表达式，聚集以及distinct声明
+
+- 出现在select子句中的属性限制null
+
+- 查询中不包含group, having子句（保证单射）
+
+\textbf{with check option} 
+
+视图定义时，指定with check option，检查通过视图修改时，结果必须在视图中，
+否则拒绝更新
+
+在试图进行不符合view条件的更新时：
+
+- 没有with check option ：
+可以更新，更新后元组不再出现在视图中
+
+- 有with check option ：
+不可以更新
+
+\subsection{事务}
+
+开端：执行一条新的sql语句
+
+结束：
+
+- commit work 结束事务并提交 
+
+- rollback work 事务没有完成，回滚数据
+
+-  commmit/rollback 事务完成，其后的sql属于新的事务
+
+\subsection{完整性约束}
+
+- 完整性：
+
+数据的正确性和相容性
+
+- 完整性检查：
+
+DMBS提供一种机制确保DB中的数据满足完整性规范\\
+
+单个关系的约束 
+
+\begin{verbatim}
+    create table [约束]
+\end{verbatim}
+
+约束：
+
+- not null 
+
+- unique
+
+-check <谓词> 
+
+\subsubsection{属性值上的约束}
+
+- not null：非空约束 要求某属性取值不能为空 
+
+- unique：唯一性约束，要求该列为一超码，但隐式允许属性为空，除非显式声明
+
+- check(P)：要求每个值都满足check(P)，
+
+\textbf{check子句}
+
+... TODO : 补完ppt
+
+\subsection{参照完整性约束}
+
+\subsubsection{references子句}
+
+写法：
+
+\begin{verbatim}
+    dept_name varchar(20) references department 
+\end{verbatim}
+
+当违反约束时，通常直接拒绝执行造成破坏完整性的操作
+
+\textbf{foreign key子句}
+
+foreign key子句可以指明，如果参照关系上的删除或更新操作违反了约束，
+系统需要在被参照关系中进行修改来满足参照完整性约束，而不是简单地拒绝操作
+
+\subsubsection{修改基本关系主码的情况}
+
+- RESTRICT 方式
+
+只有当依赖关系中没有依赖基本关系的外码值，才可以修改/删除
+
+- CASCADE 方式 
+
+将依赖关系中依赖基本关系的外码值和主码一同修改/删除
+
+- SETNULL 方式 
+
+顾名思义，将依赖关系中依赖基本关系的外码值设为null
+
+\subsubsection{约束的撤销和添加}
+
+写法：
+
+\begin{verbatim}
+    撤销用: alter ... drop ... 
+    添加用: alter ... add ... 
+\end{verbatim}
+
+示例 
+
+\begin{verbatim}
+    alter table S drop constraint S_PK 
+    alter table SC add constraint SC_CHECK 
+        check(Sno in select Sno from S)
+\end{verbatim}
+
+\textbf{域约束的创建添加与撤销}
+
+\begin{verbatim}
+    create domain AGE_DOMAIN smallint 
+        constrint DC_AGE check (value <= 25 and value >= 15)
+\end{verbatim}
+
+\subsubsection{事务中对完整性约束的违反}
+
+事务中的某一步会暂时违反完整性约束
+
+例如
+
+\begin{verbatim}
+    create table person 
+    (name varchar(20)
+    spouse varchar(20)
+    primary key name, 
+    foreign key spouse references person):
+        insert into table person( 'John', 'Mary')
+\end{verbatim}
+
+当我还没插入'Mary'时，不可能引用到'Mary'，此时会暂时破坏完整性约束 
+
+默认约束是立即检查，但延迟约束检查可以：
+
+-  在约束声明中加入initially deferred子句，在事务结束时检查。
+一个约束可以被指定为deferrable可延迟的约束，执行 set constraints constrain-list deferred 
+命令作为事务的一部分，延迟到事务结束时检查
+
+\subsection{断言}
+
+语法：
+
+\begin{verbatim}
+    create assertion <断言名> check <条件> 
+\end{verbatim}
+
+断言是谓词，标大数据库总应该满足的条件。
+
+- 一旦定义了断言，系统验证其有效性，
+并且对每个可能违反该断言的更新操作都进行检查
+
+- 这种检查会带来巨大的系统负载
+
+- 对断言“所有X,P(X)“，是通过检查"not exists X, !P(X)" 实现的 \\ 
+
+示例：
+
+\begin{verbatim}
+    create assertion ASSE2 check 
+    (not exists 
+    (select * from SC 
+        where Cno in 
+        (select Cno
+            from C 
+            where TEACHER = '张')
+            and Sno in 
+        (select Sno 
+            from S 
+            where SEX = 'M')))
+\end{verbatim}
+
+\subsection{(选看)SQL的数据类型与模式}
+
+时间部分：
+
+- time 一天中的时间，时分秒
+
+- date 日历时期，年月日
+
+- timestamp date和time的组合 
+
+\subsubsection{日期和时间函数}
+
+    extract (field from d);
+
+获取当前日期，时间函数：
+
+- current\_data 返回当前时间 
+
+- current\_time 返回当前时间（带时区） 
+
+- local\_time 返回当前本地时间（不带时区） 
+
+- current\_timestamp, local\_timestamp 时间戳 
+
+运算结果：interval区间类型
+
+\subsubsection{类型转换和格式化函数}
+
+- cast (e as t)
+
+将表达式e转换为类型t 
+
+示例：
+
+\begin{verbatim}
+    select cast(ID as nummeric(5)) as inst_id 
+    from instructor 
+    order by inst_id 
+\end{verbatim}
+
+- 格式化函数 
+
+MYSQL: format 函数 
+Oracle, PostgreSQL: to\_char, to\_number, to\_date 
+
+\subsubsection{缺省值} 
+
+语法：
+
+\begin{verbatim}
+    create table student {
+        id varchar(5), 
+        ... 
+        tot_cred numeric(3,0) default 0, 
+        ... 
+    };
+\end{verbatim}
+
+\subsubsection{大对象}
+
+字符数据的大对象clob, 二进制数据的blob 
+
+语法 
+
+\begin{verbatim}
+    bookview clob (10KB) 
+    image blob (10MB) 
+    movie blob (2GB)
+\end{verbatim}
+
+\subsubsection{用户自定义类型}
+
+\begin{verbatim}
+    create type Dollars as numeric(12,2) final 
+    create type Ponds as numeric(12,2) final 
+\end{verbatim}
+
+（一些数据库实现忽略final）
+
+即便独特类型的定义是相同的，但不能相互赋值 
+
+\subsubsection{create table的扩展}
+
+- 创建于现有某模式相同的表 
+
+\begin{verbatim}
+    create table temp_instructor like instructor 
+\end{verbatim}
+
+- 创建包含查询的结果的表
+
+\begin{verbatim} 
+    create table t1 as (
+        select 
+        ...
+    ) with data;
+\end{verbatim}
+
+
+\subsection{模式、目录和环境}
+
+当代DB实现三层结构：
+
+- 目录catalog 
+
+- 模式schema 
+
+- 关系table, 视图对象view \\ 
+
+用户连接到数据库后，有一个默认的目录和模式，
+默认目录和默认模式可以忽略 
+
+- 用create schema 和drop schema创建、忽略模式 
+
+\subsection{索引}
+
+- 关系属性中的索引(Index), 可以提高在该属性上查询的速度，
+无需扫描关系的全部内容.
+
+- 索引是数据库物理模式的一部分，
+而非逻辑部分。
+
+- 索引对数据库的高效处理很重要。但由于索引的空间代价和
+索引对更新处理的影响，要在维护何种索引上做出正确选择并不容易 \\ 
+
+语法格式
+
+\begin{verbatim} 
+    create index <索引名> on <关系名>(<属性名>)
+    create unique index <索引名> on <关系名>(<属性名>)
+
+    drop index <索引名>
+\end{verbatim}
+
+\subsection{授权}
+
+授权命令
+
+\begin{verbatim}
+    grant <权限名> on <表名|视图名> to 
+    <用户/角色列表|public> [with grant option] 
+\end{verbatim}
+
+- 权限列表包括： selectm update, insert, delete , index 
+alter drop, resource 以及它们的总和all, 其中对select update insert 可以指定属性列表 
+
+- with grant option表示获得权限的用户可以把权限再次授予其他用户\\ 
+
+例子：
+
+\begin{verbatim}
+    grant select, insert on S to Liming 
+    with grant option 
+
+    grant all on S to public 
+
+    grant update(budget) on department to Amit, satoshi
+\end{verbatim}
+
+- 收回权限
+
+\begin{verbatim}
+    revoke 表级权限 on {表名|视图名} from {用户[用户,]... | public}
+\end{verbatim}
+
+收回权限的操作是递归的
+
+\subsubsection{角色}
+
+- 创建角色：
+
+create role instructor; 
+
+- 授权角色： 
+
+grant select on takes to instructor;
+
+- 角色可以授予给角色和其他角色 
+
+\begin{verbatim}
+grant instructor to Amit; 
+create role dean; 
+grant instructor to dean; 
+grant dean to Satoshi;
+\end{verbatim}
+
+\subsubsection{授权图}
+
+授权图是一棵树，节点是用户，当且仅当存在从根节点R到结点
+A的路径时，A才拥有权限 
+
+- 级联收回(默认) 
+
+收回权限时，若该用户已将权限授予其他用户，那么也一并收回其子节点的权限，
+但如果两个结点互为子节点，则循环递归，难以收回\\ 
+
+- 防止级联收回 restrict 
+
+\begin{verbatim}
+    revoke select on department from Amit restrict; 
+\end{verbatim}
+如果存在任何级联收回，返回错误，不执行任何收权动作 
+
+- 仅收回grant option，保留其他权限 
+
+\begin{verbatim}
+    revoke grant option for select on department from Amit; 
+\end{verbatim}
+
+一些数据库的实现不支持以上语法；可以收回权限，然后不带grant option重新授权 \\
+
+- 通过角色授权, 避免用户授权的级联收回 
+
+1）设置当前会话的当前角色为已定义角色 
+set role role\_name 
+
+2）有当前角色授权，授权语句如 
+set role role\_name 
+
+\subsubsection{数据库级权限授权}
+
+语法 
+
+\begin{verbatim}
+    grant 数据库级权限 to {user[user ,]...|public }
+\end{verbatim}
+
+数据库级权限包括 
+
+- connnect 允许用户在database语句中指定数据库 
+
+- resource connect权限+建表，删除表及索引权利 
+
+- dba resource权限+授予或撤销其他用户的connect, resource, dba权限 
+
+不允许dba撤销自己的dba权限 
+
+\subsubsection{行级授权}
+
+\begin{verbatim}
+    ID = sys_context('USERENV', 'SESSION_USER')
+\end{verbatim}
+
+系统将该谓词添加到使用takes关系的每个where子句中，每个 
+学生只能看到与自己ID有关的数据 
+
+\section{使用程序设计语言访问数据库}
+
+动态SQL
+
+用函数或者方法与数据库API交互 
+
+- JDBC
+
+- 从python访问数据库
+
+- ODBC 
+
+嵌入式SQL
+
+- sql嵌入到宿主语言中 
+
+- 通过预编译程序处理嵌入宿主语言的sql
+
+\subsection{JDBC}
+
+Java DataBase Connectivity ，面向java的数据库API，
+原理，体系结构和用法基本都类似ODBC 
+
+工作原理: 
+
+\begin{table}[htbp] 
+    \centering 
+    \caption{JDBC的系统架构}
+
+    \begin{tabular}{|c|c|}
+        \hline 
+        Java application&$\downarrow$\\
+        \hline 
+        JDBC API& $\downarrow$\\ 
+        \hline 
+        JDBC Driver Manager& $\downarrow$\\ 
+        \hline 
+        JDBC Driver& JDBC Driver \\ 
+        \hline 
+        Sql Server & Oracle \\
+        \hline
+    \end{tabular}
+
+\section{触发器}
+
+举例：职工工资增幅不超过10\% 
+
+\begin{verbatim}
+create trigger RAISE_LIMIT 
+after update of SALon on EMP 
+    referencing new row as nrowold row as orow 
+    for each row 
+    when (nrow.SAL > 1.1*orow.SAL)
+        begin atomic 
+            signal SQLSTATE('7500','Salary increase 10\%')
+        end
+\end{verbatim}
+    
+
+\end{table}
+
+
+
+
+
+
+
+\end{document}     
+
