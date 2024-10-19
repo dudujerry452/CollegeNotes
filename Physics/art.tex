@@ -1,0 +1,313 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper,oneside,UTF8]{ctexart}
+\usepackage{fontspec}
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,marginparwidth=1.75cm]{geometry}
+\usepackage{array}
+\usepackage{amsmath,amsthm,amssymb,graphicx,bm,setspace}
+\setlength{\parindent}{2em}
+\linespread{1.2}
+
+\usepackage{titlesec}
+
+\usepackage{fancyhdr} %设置页眉页脚
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\usepackage{cite}
+\usepackage[numbers,sort&compress]{natbib}%参考文献
+
+\usepackage{hyperref} %超链接用于跳转索引参考文献
+\usepackage{booktabs}
+
+\renewcommand{\refname}{\bfseries \songti \sihao 参考文献}  
+ %修改默认的参考文献四个字
+
+%设置摘要格式
+\usepackage{abstract}
+\setlength{\abstitleskip}{-2em}
+\setlength{\absleftindent}{0pt}
+\setlength{\absrightindent}{0pt}
+\setlength{\absparsep}{0em}
+\renewcommand{\abstractname}{\bfseries \xiaosi 摘要}
+\renewcommand{\abstracttextfont}{\xiaosi \songti} %设置摘要正文字号
+
+\usepackage{caption}
+\captionsetup[figure]{name={\songti \wuhao 图} ,labelsep=space}
+\captionsetup[table]{name={\songti \wuhao 表},labelsep=space}
+
+%定义中文字号
+\renewcommand{\baselinestretch}{1.5}% 定义行间距(1.5)
+\newcommand{\yihao}{\fontsize{26pt}{39pt}\selectfont}
+\newcommand{\xiaoyi}{\fontsize{24pt}{36pt}\selectfont}   
+\newcommand{\erhao}{\fontsize{22pt}{33pt}\selectfont}          
+\newcommand{\xiaoer}{\fontsize{18pt}{27pt}\selectfont}          
+\newcommand{\sanhao}{\fontsize{16pt}{24pt}\selectfont}        
+\newcommand{\xiaosan}{\fontsize{15pt}{22.5pt}\selectfont}        
+\newcommand{\sihao}{\fontsize{14pt}{21pt}\selectfont}            
+\newcommand{\xiaosi}{\fontsize{12pt}{18pt}\selectfont}            
+\newcommand{\wuhao}{\fontsize{10.5pt}{15.75pt}\selectfont}
+\newcommand{\xiaowu}{\fontsize{9pt}{13.5pt}\selectfont}    
+\newcommand{\liuhao}{\fontsize{7.5pt}{11.25pt}\selectfont}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}%小节标题靠左显示
+%字号设置
+
+\begin{document}
+
+\newpage
+
+\thispagestyle{fancy}
+
+\rfoot{\thepage}
+
+\begin{center}
+	\bfseries \songti \xiaoer  声速的测量 
+
+	\centering \kaishu  \xiaosi 专业~环境科学与工程~班级~23.2 
+
+	\centering \kaishu \xiaosi 202322210073 周致远
+
+	\begin{table}[!b]	
+
+	\centering \kaishu \xiaosi 实验时间 2024年5月30日
+	
+	\end{table}
+
+\end{center}
+
+\newpage
+
+\begin{abstract}
+
+本实验研究采用共振干涉法和相位比较法测量空气中声速,使用SV5(6)型声速测量组合仪和示波器.结果显示测量值略高于公认值,分析了偏差原因并提出改进.讨论了实验关键点,强调了共振状态和李萨如图形观测的重要性.
+
+\end{abstract}
+
+\noindent \textbf{关键词}: 声速测量; 共振干涉法; 相位比较法; 声波; 介质参数
+
+\tableofcontents
+
+\section{前言}
+
+声波是一种频率介于 20Hz $\sim$ 20kHz 的机械波,波长、强度、传播速度等是声波的重要参数.超声波的频率为20 $\sim$ 500 MHz,超声波的传播速度在同一介质中与声速相同,但它具有波长短、穿透能力强、易于定向传播的优点,因而在超声波段进行声速的测量比较方便.
+
+
+超声波在介质中的传播速度是一个基本物理量,本实验采用共振干涉法、相位比较法测量空气中的超声波传播速度,了解声速与气体状态参量的关系.
+
+\section{实验部分}
+\subsection{实验目的}
+
+(1)~学会用共振干涉法、相位比较法测量声速,并加深对共振、振动合成、波的干涉等理论知识的理解.
+
+(2)~了解作为传感器的压电陶瓷的功能及超声波产生、发射、传播和接收的原理.
+
+(3)~进一步掌握示波器和低频信号发生器的使用方法.
+
+\subsection{实验仪器}
+
+SV5(6)型声速测量组合仪、双通道通用示波器等.\\
+
+1.SV5(6)型声速测量组合仪: 
+
+支架与丝杠上相向安装两个固有频率相同的压电陶瓷换能器,其距离可通过手轮调节,如图~\ref{SV5}.
+
+\begin{figure}[htpb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{SV5-6.jpg}
+	\caption{SV5(6)型声速测量组合仪}
+	\label{SV5}
+\end{figure}
+
+根据工作方式,换能器可分为纵向换能器和径向换能器以及弯曲振动换能器.其中含有压电陶瓷片,在应力作用下两极产生异号电荷,两极间产生电势差(称正压电效应);而当压电材料两端间加上外加电压时又能产生变(称为逆压电效应),以实现声能和电能的相互转换,实现超声波的发射和接收.
+
+\subsection{实验原理}
+
+机械波的传播是通过介质各点间的弹性力来实现的,波速决定于媒介的状态和性质(密度和弹性模量),液体和固体的弹性模量与密度的比值一般比气体的大,因而其中的声速也较大.在理想气体中声速为$ v=(\gamma RT/M)^{1/2}$(式中$\lambda$为比热容比,R为普适气体常量,T为热力学温度,M为气体摩尔质量),可见声速与气体的性质及温度有关,因此测定声速可以推算出气体的一些参量.由于在波的传播过程中波速v、波长$\lambda$与频率$f$之间存在着$v=\lambda \cdot f$的关系,若能同时测定介质中声波传播的频率及波长,即可求得此种介质中声波的传播速度v.测量声速也可以利用$v=L/t$,其中L为声波传播的路程,t为声波传播的时间.\\
+
+\textbf{1．共振干涉(驻波)法测声速}
+
+实验装置接线如图~\ref{jiexian} 所示,低频信号发生器的面板中S1和S2为压电陶瓷超声换能器．S1作为超声源(发射头),低频信号发生器输出的正弦交变电压信号接到换能器S1上,使S1发出一列平面波．S2作为超声波接收头,把接收到的声压转换成交变的正弦电压信号后输入示波器观察．这样,S2在接收超声波的同时还反射一部分超声波．由S1发出的超声波和由S2反射的超声波在S1和S2之间产生定域干涉,而形成驻波．由波动理论知,当入射波振幅$A_1$与反射波振幅$A_2$相等,即$A_1=A_2=A$时,某一位置x处的合振动方程为
+
+\begin{equation}\label{eq1}
+	Y=Y_1+Y_2=(2Acos2\pi \frac{x}{\lambda})cos\omega t 
+\end{equation}
+
+\noindent 由式~\ref{eq1}可知,当$ 2\pi \dfrac{x}{\lambda} =(2k+1) \dfrac{\pi}{2} $,即$x=(2k+1)\dfrac{\lambda}{4}(k=0,1,2,3,\cdots)$时,这些点的振幅始终为零,即为波节；当$ 2\pi \dfrac{x}{\lambda}=k\pi,即x=k\dfrac{\lambda}{2}(k=0,1,2,3,\cdots) $时,这些点的振幅最大,等于2A,即为波腹．所以,相邻波腹(或波节)的距离为$\lambda / 2$．
+
+\begin{figure}[htpb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{接线.jpg}
+	\caption{实验装置接线}
+	\label{jiexian}
+\end{figure}
+
+当信号发生器的激励频率等于系统固有频率时,系统将发生能量积聚产生共振,声波波腹处的振幅达到相对最大值.当激励频率偏离系统固有频率时,驻波的形状不稳定,且声波波腹的振幅比最大值小得多．由式~\ref{eq1}可知,当S1和S2之间的距离L恰好等于半波长的整倍数,即$ L=k\lambda /2(k=0,1,2,3,3,\cdots) $ 时,形成驻波,示波器上可观察到较大幅度的信号,不满足条件时,观察到的信号幅度较小.\\
+
+理论证明:振幅最大的点,声波的压强最小；相反,振幅最小的点,声波的压强最大.移动S2,对某一特定波长,将相继出现一系列共振态,任意两个相邻的共振态之间,S2的位移为
+
+$$ \Delta L = L_{k+1} - L_{k} = (k+1)\dfrac{\lambda}{2} - k\dfrac{\lambda}{2} = \dfrac{\lambda}{2} $$ 
+
+\noindent 所以,当S1和S2之间的距离L连续改变时,示波器上的信号幅度每一次周期性变化,相当于S1和S2之间的距离改变了$\dfrac{\lambda}{2}$.此距离$\dfrac{\lambda}{2}$可由游标卡尺测得,频率$f$由信号发生器读得,根据波速公式
+
+$$ v = \lambda \cdot f $$
+
+\noindent 可求得声速.
+
+\textbf{2.相位比较法}
+
+实验装置接线不变,置示波器功能于X-Y方式.当S1发出的平面超声波通过介质到达接收器S2时,在发射波和接收波之间产生相位差
+
+$$ \Delta \varphi = \varphi_1 - \varphi_2 = 2\pi\dfrac{L}{\lambda} = 2\pi f \dfrac{L}{v} $$
+
+\noindent 因此,可以通过测量$\Delta \varphi $来求得声速.$\Delta \varphi $的测定可用互相垂直合成的俩如图形来进行.设输入x轴的振幅为$A_1$,圆频率为$\omega$,初相位为$\varphi_1$；输入y轴的振幅为$A_2$,圆频率为$\omega$,初相位为$\varphi_2$.则合成振动方程为
+
+$$ \dfrac{x^2}{A_1^2} +\dfrac{y^2}{A_2^2} - \dfrac{2xy}{A_1 A_2}cos(\varphi_2 - \varphi_1) = sin^2(\varphi_2 - \varphi_1) $$
+
+此轨迹一般为椭圆,当$\Delta \varphi=0$ 或$\Delta \varphi = \pi $时,分别得到两条相反直线 $y=-\dfrac{A_2}{A_1}x$, $y=\dfrac{A_2}{A_1}x$
+分别出于第二、第四象限.随着相位差从0到$\pi$的变化,李萨如图形从斜率为正的直线变为椭圆,再变为斜率为负的直线.因此,每移动半个波长,就会出现斜率符号相反的直线,根据$v=\lambda f$可计算声速.
+
+\subsection{实验内容}
+
+\textbf{1.声速测试仪系统的连接与调试}\\
+
+在通电后,预热15min,信号源自动工作在连续波模式,选择的介质为空气的初始状态,声速测试仪和声速测试信号源及双通道示波器的连接仍如图~\ref{jiexian}所示.
+
+(1)测试架上的换能器与声速测试仪信号源之间的连接．
+
+信号源面板上的发射端换能器接口(S1),用于输出相应频率的功率信号,接至测试架左边的发射换能器(S1)；接收端的换能器接口(S2),连接测试架右边的接收换能器(S2)．
+
+(2)示波器与声速测试仪信号源之间的连接．
+信号源面板上的发射端(Y1),接至双踪示波器的CH1,用于观察发射波形；信号源面板上的接收端(Y2),接至双踪示波器的CH2,用于观察接收波形．\\
+
+\textbf{2．测定压电陶瓷换能器系统的最佳工作点}\\
+
+只有当换能器S1发射面和S2与接收面保持平行时才有较好的接收效果．为了得到清晰的接收波形,应将外加的驱动信号频率调节到发射换能器S1谐振频率点处,这样才能较好地进行声能与电能的相互转换,提高测量精度,得到较好的实验效果.
+
+(1)按照调节到压电陶瓷换能器谐振点处的信号频率,估计一下示波器的扫描时基t/div并进行调节,使在示波器上获得稳定波形.
+
+(2)超声换能器工作状态的调节．各仪器都正常工作以后,首先在100～500mV调节声速测试仪信号源输出电压,在25～45kHz调节信号频率,通过示波器观察频率调整时接收波的电压幅度变化,在某一频率点处(34.5～38.5kHz)电压幅度最大,同时声速测试仪信号源的信号指示灯亮,此频率即是与压电换能器S1、S2相匹配的频率点,记录频率$f$．
+
+(3)改变S1和S2之间的距离,选择示波器屏上呈现出最大电压波形幅度时的位置,再微调信号频率,如此重复调整,再次测定工作频率,共测量5次,将数据填入表~\ref{frequency}并求平均值f．\\
+
+\textbf{3．共振干涉法(驻波法)测量波长}\\
+
+(1)将信号源测试方法设置到连续波方式,设定最佳工作频率为$f$．
+
+(2)将示波器调到合适的工作方式,观察示波器,找到接收波形的最大值．
+
+(3)转动声速仪调节距离鼓轮,这时波形的幅度会发生变化(注意:此时在示波器上可以观察到来自接收换能器的振动曲线波形发生位移),记录幅度为最大时的距离 $ L_{i} $；再向前或者向后沿一个方向移动接收器的位置,当接收波形幅度由大变小,再由小变大,且达到最大时,记录此时的距离$L_{i+1}$,即波长$ \lambda = 2|L_{i+1} - L_1|$.
+
+(4)连续移动接收器的位置,观测示波器相继出现的极大值,依次在表~\ref{lambda1}中记录游标尺的相应值,用逐差法处理数据.
+
+(5)根据v=λ·f求出声速.\\
+
+\textbf{4．相位比较法(李萨如图形)测量波长}\\
+
+(1)将信号源测试方法设置到连续波方式,设定最佳工作频率为$f$．
+
+(2)开始时仍置示波器于双踪显示功能,观察发射和接收信号波形,转动距离调节鼓轮,至接收信号幅度达最大值时的位置．调节示波器CH1、CH2衰减灵敏度旋钮、信号源发射强度、接收增益,令两波形幅度几乎相等,观察两波形曲线间的关系.
+
+(3)置示波器于X-Y功能方式,这时观察到的李萨如图形为一斜线,否则可微调声速仪的鼓轮实施之,记录下此时的距离$L_i$.
+
+(4)单向转动调节鼓轮,改变换能器之间的距离．当移动一个波长时,观察到波形又返回前面所说的特定角度的斜线,这时来自接收换能器S2的振动波形发生了2π相移,记录此时的距离$ L_{i+1} $.即波长$ \lambda = |L_{i+1} - L_i|$.
+
+(5)多次测定,依次在表~\ref{lambda2}中记录游标尺的相应值,并用逐差法处理数据．
+
+(6)根据v=λ·f求出声速.
+
+\subsection{数据记录与处理}
+
+\begin{table}[h]
+	\raggedright
+	\caption{最佳工作频率}
+	\label{frequency}
+	t = 25	\text{$^{\circ}$ C}\\
+	\centering
+	\begin{tabular}{p{1.5cm}<{\centering}|p{1.5cm}<{\centering}|p{1.5cm}<{\centering}|m{1.5cm}<{\centering}|p{1.5cm}<{\centering}|p{1.5cm}<{\centering}|p{1.5cm}<{\centering}}
+		n&1&2&3&4&5&平均值\\ \hline
+		$f/kHz$&37.025&37.026&37.025&37.034&37.038&37.030\\
+
+	\end{tabular}
+\end{table}
+
+\noindent 标准不确定度
+
+$$ U_{s\bar f} = \sqrt{U_{sA}^2 + U_{sB}^2} = \sqrt{\dfrac{\sum (f_i - \bar f)^2}{n(n-1)} + (\dfrac{\Delta_f}{\sqrt{3}})} = 2.76 \times 10^{-3} ~ KHz$$
+
+\begin{table}[h]
+	\caption{共振法测量波长}
+	\label{lambda1}
+	\centering
+	\begin{tabular}{p{1.5cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}|m{1.2cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}}
+		i+8&9&10&11&12&13&14&15&16 \\ \hline
+		$L_{i+8}/mm$&43.12&47.88&52.19&57.82&62.00&66.75&71.40&76.05 \\ \hline
+		i&1&2&3&4&5&6&7&8 \\ \hline
+		$L_{i}/mm$&5.41&9.88&14.46&19.26&24.12&28.82&33.50&38.27\\ 
+	
+	\end{tabular}
+
+\end{table}
+
+$$ \bar \lambda = 2 \times \dfrac{1}{8^2} \sum_{i=1}^{8}(L_{i+8} - L_i) = 9.48 mm $$
+
+$$ \bar v = \bar \lambda \cdot \bar f  = 351 m/s $$ 
+
+\noindent 标准不确定度
+
+$$ U_{s\bar \lambda} = \sqrt{U_{sA}^2 + U_{sB}^2} = \sqrt{\dfrac{\sum (\lambda_i - \bar \lambda)^2}{n(n-1)} + (\dfrac{\Delta_{\lambda}}{\sqrt{3}})^2} = 2.47 \times 10^{-2} ~ mm$$
+
+ 
+$$ U_{s\bar v} = \bar v \sqrt{(\dfrac{U_{s\bar f}}{\bar f})^2 + (\dfrac{U_{s \bar \lambda}}{\bar \lambda})^2} = 0.915 ~ m/s $$
+
+$$ v = \bar \lambda \cdot \bar f  = (351 \pm 0.915) ~ m/s $$ 
+
+\begin{table}[h]
+	\caption{相位比较法测量波长}
+	\label{lambda2}
+	\centering
+	\begin{tabular}{p{1.5cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}|m{1.2cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}|p{1.2cm}<{\centering}}
+		i+8&9&10&11&12&13&14&15&16 \\ \hline
+		$L_{i+8}/mm$&143.62&153.00&162.37&171.74&181.30&190.74&199.95&209.41 \\ \hline
+		i&1&2&3&4&5&6&7&8 \\ \hline
+		$L_{i}/mm$&67.42&77.10&86.50&95.05&105.06&114.97&124.49&134.12\\ 
+	
+	\end{tabular}
+
+\end{table}
+
+$$ \bar \lambda = \dfrac{1}{8^2} \sum_{i=1}^{8} (L_{i+8} - L_i) = 9.48 mm $$ 
+
+$$ \bar v = \bar \lambda \cdot \bar f  = 351 m/s$$
+
+\noindent 标准不确定度
+
+$$ U_{s\bar \lambda} = \sqrt{U_{sA}^2 + U_{sB}^2} = \sqrt{\dfrac{\sum (\lambda_i - \bar \lambda)^2}{n(n-1)} + (\dfrac{\Delta_{\lambda}}{\sqrt{3}})^2} = 2.01 \times 10^{-2} ~ mm$$
+
+$$ U_{s\bar v} = \sqrt{U^2_{sA} + U^2_{sB}} = 0.745 ~ m/s$$
+
+$$ v = \bar \lambda \cdot \bar f  = (351 \pm 0.745) ~ m/s$$
+
+\section{实验结果与思考}
+
+\textbf{1.实验结果分析}\\
+
+实验测得声速为  $ 351 m/s $,与公认值$v = 331.45 \times (1+t/273.45)^{1/2} (m/s)$在$25^{\circ} C$计算结果$346.27 m/s$相比偏大.分析原因,可能是最初每次测定最佳工作频率之间换能器的位移差距较小,测得共振频率存在偏差,导致后续相位差积累,最大振幅出现点受影响(这一点在相位比较法中尤为明显.从相位比较法测得的逐差数据中看出,测得的波长随着位移增大而单调减小).\\
+
+\textbf{2.实验思考}\\
+
+(1)为什么要在系统达到驻波共振状态下进行声速的测量?
+
+当驻波达到共振状态时,驻波的形状稳定,且振幅比非共振状态大得多,易于观察测量.
+
+(2)为什么要选李萨如图形中斜线作为观测点?
+
+对比封闭曲线,斜线能够精确判断是否到达半波长位移.
+
+\addcontentsline{toc}{section}{参考文献}
+
+\begin{thebibliography}{9}
+	 \bibitem{ref1} 徐建强,韩广兵 ,\textit{《大学物理实验 (第三版) 》}, 科学出版社, 2020
+\end{thebibliography}
+
+\end{document}
