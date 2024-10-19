@@ -1,0 +1,12 @@
+\documentclass{article}
+\usepackage{tikz}
+\begin{document}
+	\centering
+	\begin{tikzpicture}
+	\foreach \x in {1,...,5}
+	{
+		\draw (\x*2,0) circle (0.4cm);
+		\draw (\x*2,0) node{This is node}
+	}
+	\end{tikzpicture}
+\end{document}
