@@ -3,19 +3,20 @@
 \usepackage{amsmath}
 \usepackage{ctex}
 \usepackage{xcolor}
+\usepackage{ulem}
 \usetikzlibrary {positioning}
 \title{一种基于口胡的KMP算法介绍（雾）}
 \author{周致远}
 \begin{document}
 	\maketitle
 	
-	众所周知，字符串模式匹配是计算机科学最为古老的问题之一。朴素的字符串匹配算法可以描述为：对于待匹配字符串（下称之为文本）的每一个位置，逐个字符比较从该位置开始是否与模式串（下称之为子串）完全匹配。时间复杂度为$O(n*m)$，十分低效。于是，我接下来要介绍一种更快、更优雅，而且基本是线性复杂度的字符串匹配算法——KMP算法(The Knuth-Morris-Pratt Algorithm)。
+	众所周知，字符串模式匹配是计算机科学最为古老的问题之一。朴素的字符串匹配算法可以描述为：对于待匹配字符串（下称之为文本）的每一个位置，逐个字符比较从该位置开始是否与模式串（下称之为模板）完全匹配。时间复杂度为$O(n*m)$，十分低效。于是，我斗胆用我粗浅的理解介绍一种更快、更优雅，而且基本是线性复杂度的字符串匹配算法——KMP算法(The Knuth-Morris-Pratt Algorithm)。
 
 	KMP的思想是充分利用朴素算法忽略的信息来加快匹配。假设有如下文本：
 
 	$$goodgoogle$$
 
-	和以下子串：
+	和以下模板：
 
 	$$google$$
 
@@ -154,8 +155,8 @@
 	\end{tikzpicture}
 	\end{centering}
 
-	设文本表示为 $\{s_1, s_2 , ... , s_10\}$；子串表示为 $\{t_1, t_2, ... , t_6\}$（下同），
-	我们发现，即便出现三个字符"goo"="goo"匹配的特殊情况，朴素算法也会无视这一点，直接跳到文本下一位和子串初始位。实际上，其中仍有可挖掘的信息：部分匹配给予了算法关于文本的一部分知识。基于朴素匹配算法，设子串长度为n，文本长度为$n_t$，如果把子串看成一个n维向量：
+	设文本表示为 $\{s_1, s_2 , ... , s_10\}$；模板表示为 $\{t_1, t_2, ... , t_6\}$（下同），
+	我们发现，即便出现三个字符"goo"="goo"匹配的特殊情况，朴素算法也会无视这一点，直接跳到文本下一位和模板初始位。实际上，其中仍有可挖掘的信息：部分匹配给予了算法关于文本的一部分知识。基于朴素匹配算法，设模板长度为n，文本长度为$n_t$，如果把模板看成一个n维向量：
 
 	$$ T = 
 	\left[\begin{array}{c} 
@@ -193,11 +194,11 @@
 	\end{array}\right]
 	$$
 
-	标为红色的元素是在部分匹配时就已经确定了的，这意味着算法如果能根据已知的红色信息跳过部分匹配长度的匹配次数，就可以将复杂度降到线性！并且部分匹配的字符串还有一个更加优良的特性：它是子串的一部分，也就是说可以根据部分匹配的长度+子串信息就可以判断跳过哪些匹配。根据红色部分已知信息，下一次跳过取决于：
+	标为红色的元素是模板的一部分，而且接下来还要和模板匹配。所以，这属于模板自己和自己比较，而且变量只有模板的子串长度；这启发我们可以在不需要文本的情况下直接对下几次匹配进行判断。根据已知信息，能够进行的判断有：
 
 	\vspace{0.7cm}
 
-	%此时我们已知在当前位置，文本和子串的前三位相等且为"goo"；而下一次匹配时的前两位为"oo"，再下一次匹配的前一位为"o"，这就是我们根据相等获得的额外信息。所以，只要"go"!="oo"则可以跳过下一条、"g"!="o"则可以跳过再下一条，可惜再下次匹配的前三位已经不包含任何第一次的字符了，根据已知信息已经无法跳过更多匹配，于是在这停顿。
+	%此时我们已知在当前位置，文本和模板的前三位相等且为"goo"；而下一次匹配时的前两位为"oo"，再下一次匹配的前一位为"o"，这就是我们根据相等获得的额外信息。所以，只要"go"!="oo"则可以跳过下一条、"g"!="o"则可以跳过再下一条，可惜再下次匹配的前三位已经不包含任何第一次的字符了，根据已知信息已经无法跳过更多匹配，于是在这停顿。
 
 	\begin{centering}
 	\usetikzlibrary {arrows.meta, positioning}
@@ -221,13 +222,13 @@
 		\node [correct] (a3) [right=2mm of a2]{o};
 		\node [place] (a4) [right=2mm of a3]{...};
 
-		\draw [->] (b2) -- (a1) node [midway, xshift = 4]{?};
-		\draw [->] (b3) -- (a2) node [midway, xshift = 4] {?};
+		\draw [red, ->] (b2) -- (a1) node [midway]{$\times$};
+		\draw [red, ->] (b3) -- (a2) node [midway] {$\times$};
 
 	\end{tikzpicture}
 	\end{centering}
 	
-	此处仅涉及已知量（红色）；那么再下一次匹配是否跳过取决于：
+	和
 
 	\vspace{0.5cm}
 
@@ -253,12 +254,48 @@
 		\node [correct] (a3) [right=2mm of a2]{o};
 		\node [place] (a4) [right=2mm of a3]{...};
 
-		\draw [->] (b3) -- (a1) node [midway, xshift = 4]{?};
+		\draw [red, ->] (b3) -- (a1) node [midway]{$\times$};
 
 	\end{tikzpicture}
 	\end{centering}
 
-	在子串滑动的过程中，我们惊讶的发现每次判断是否跳过时，其实是在判断已知部分的前后缀是否相等！（找回了前世记忆）而这就是KMP算法的主要思想所在。让我们再看一组例子：
+	滑动的过程中，我们发现"oo"和"go"分别是部分匹配的后两位、前两位；"o"和"g"则分别是最后一位、第一位。\textbf{如果我们称从开头开始的连续子串为前缀，从末尾开始的连续子串为后缀，那么在不依赖文本匹配的情况下，其实是判断已知部分的前后缀是否相等！}（找回了前世记忆）如果相等，那么在这个位置可以匹配，否则不需要考虑。而这就是KMP算法的主要思想所在，如果我们能预先处理出模板每个子串的最大前后缀长度，就能预先判断每次部分匹配时的最先跳转位置。让我们再看一组例子：
+
+	\vspace{0.5cm}
+
+	\begin{centering}
+	\usetikzlibrary {arrows.meta, positioning}
+	\begin{tikzpicture}
+		[place/.style={circle,draw=blue!50,fill=blue!20,thick,inner sep=0pt, minimum size=10mm},
+		correct/.style={circle,draw=blue!50,fill=red!20,thick,inner sep=0pt, minimum size=10mm},
+		correct2/.style={circle,draw=blue!50,fill=green!20,thick,inner sep=0pt, minimum size=10mm},
+		transition/.style={rectangle,draw=black!50,fill=black!20,thick, inner sep=0pt, minimum size=6mm}]
+		\node [correct2] (b1) {a};
+		\node [correct2] (b2) [right=2mm of b1]{b};
+		\node [correct2] (b3) [right=2mm of b2]{c};
+		\node [correct2] (b4) [right=2mm of b3]{a};
+		\node [correct2] (b5) [right=2mm of b4]{b};
+		\node [place] (b6) [right=2mm of b5]{d};
+		\node [place] (b7) [right=2mm of b6]{e};
+		\node [place] (b8) [right=2mm of b7]{f};
+		\node [place] (b9) [right=2mm of b8]{j};
+		\node [place] (b10) [right=2mm of b9]{k};
+
+		\node [correct2] (a1) [below =of b1]{a};
+		\node [correct2] (a2) [right=2mm of a1]{b};
+		\node [correct2] (a3) [right=2mm of a2]{c};
+		\node [correct2] (a4) [right=2mm of a3]{a};
+		\node [correct2] (a5) [right=2mm of a4]{b};
+
+		\draw [->] (b1) -- (a1) {};
+		\draw [->] (b2) -- (a2) {};
+		\draw [->] (b3) -- (a3) {};
+		\draw [->] (b4) -- (a4) {};
+		\draw [->] (b5) -- (a5) {};
+
+	\end{tikzpicture}
+	\end{centering}
+
 
 	\vspace{0.5cm}
 
@@ -284,8 +321,9 @@
 		\node [correct] (a3) [right=2mm of a2]{c};
 		\node [correct] (a4) [right=2mm of a3]{a};
 		\node [correct] (a5) [right=2mm of a4]{b};
+		\node (a6) [right=2mm of a5] {不进行此次判断};
 
-		\draw [->] (b2) -- (a1) node [midway]{$\times$};
+		\draw [->] (b2) -- (a1) node [midway]{$?$};
 
 	\end{tikzpicture}
 	\end{centering}
@@ -315,8 +353,9 @@
 		\node [correct] (a3) [right=2mm of a2]{c};
 		\node [correct] (a4) [right=2mm of a3]{a};
 		\node [correct] (a5) [right=2mm of a4]{b};
+		\node (a6) [right=2mm of a5] {不进行此次判断};
 
-		\draw [->] (b3) -- (a1) node [midway]{$\times$};
+		\draw [->] (b3) -- (a1) node [midway]{$?$};
 
 	\end{tikzpicture}
 	\end{centering}
@@ -348,13 +387,76 @@
 		\node [correct] (a4) [right=2mm of a3]{a};
 		\node [correct] (a5) [right=2mm of a4]{b};
 
-		\draw [->] (b4) -- (a1) node [midway, xshift = 4]{};
-		\draw [->] (b5) -- (a2) node [midway, xshift = 4]{};
+		\draw [red, ->] (b6) -- (a3) node [midway]{$\times$};
 
 	\end{tikzpicture}
 	\end{centering}
 
-	也即，此时满足：
+	\vspace{0.5cm}
+
+	\begin{centering}
+	\usetikzlibrary {arrows.meta, positioning}
+	\begin{tikzpicture}
+		[place/.style={circle,draw=blue!50,fill=blue!20,thick,inner sep=0pt, minimum size=10mm},
+		correct/.style={circle,draw=blue!50,fill=red!20,thick,inner sep=0pt, minimum size=10mm},
+		correct2/.style={circle,draw=blue!50,fill=green!20,thick,inner sep=0pt, minimum size=10mm},
+		transition/.style={rectangle,draw=black!50,fill=black!20,thick, inner sep=0pt, minimum size=6mm}]
+		\node [correct] (b1) {a};
+		\node [correct] (b2) [right=2mm of b1]{b};
+		\node [correct] (b3) [right=2mm of b2]{c};
+		\node [correct] (b4) [right=2mm of b3]{a};
+		\node [correct] (b5) [right=2mm of b4]{b};
+		\node [place] (b6) [right=2mm of b5]{d};
+		\node [place] (b7) [right=2mm of b6]{e};
+		\node [place] (b8) [right=2mm of b7]{f};
+		\node [place] (b9) [right=2mm of b8]{j};
+		\node [place] (b10) [right=2mm of b9]{k};
+
+		\node [correct] (a1) [below =of b5]{a};
+		\node [correct] (a2) [right=2mm of a1]{b};
+		\node [correct] (a3) [right=2mm of a2]{c};
+		\node [correct] (a4) [right=2mm of a3]{a};
+		\node [correct] (a5) [right=2mm of a4]{b};
+		\node (a6) [right=2mm of a5] {不进行此次判断};
+
+		\draw [->] (b5) -- (a1) node [midway]{$?$};
+
+	\end{tikzpicture}
+	\end{centering}
+
+	\vspace{0.5cm}
+
+	\begin{centering}
+	\usetikzlibrary {arrows.meta, positioning}
+	\begin{tikzpicture}
+		[place/.style={circle,draw=blue!50,fill=blue!20,thick,inner sep=0pt, minimum size=10mm},
+		correct/.style={circle,draw=blue!50,fill=red!20,thick,inner sep=0pt, minimum size=10mm},
+		correct2/.style={circle,draw=blue!50,fill=green!20,thick,inner sep=0pt, minimum size=10mm},
+		transition/.style={rectangle,draw=black!50,fill=black!20,thick, inner sep=0pt, minimum size=6mm}]
+		\node [place] (b1) {a};
+		\node [place] (b2) [right=2mm of b1]{b};
+		\node [place] (b3) [right=2mm of b2]{c};
+		\node [place] (b4) [right=2mm of b3]{a};
+		\node [place] (b5) [right=2mm of b4]{b};
+		\node [place] (b6) [right=2mm of b5]{d};
+		\node [place] (b7) [right=2mm of b6]{e};
+		\node [place] (b8) [right=2mm of b7]{f};
+		\node [place] (b9) [right=2mm of b8]{j};
+		\node [place] (b10) [right=2mm of b9]{k};
+
+		\node [place] (a1) [below =of b6]{a};
+		\node [place] (a2) [right=2mm of a1]{b};
+		\node [place] (a3) [right=2mm of a2]{c};
+		\node [place] (a4) [right=2mm of a3]{a};
+		\node [place] (a5) [right=2mm of a4]{b};
+
+		\draw [red, ->] (b6) -- (a1) node [midway]{$\times$};
+
+	\end{tikzpicture}
+	\end{centering}
+
+
+	此时满足：
 
 	\begin{centering}
 	\usetikzlibrary {arrows.meta, positioning}
@@ -369,14 +471,31 @@
 		\node [correct2] (a5) [right=2mm of a4]{b};
 
 		\node [correct2] (a2) [left=2mm of a3]{b}
-			edge [pre, bend left] (a5);
+			edge [bend left] node [above] {=}   (a5);
 		\node [correct2] (a1) [left=2mm of a2] {a}
-			edge [pre, bend left] (a4);
-
+			edge [bend left] node [above] {=}  (a4);
 	\end{tikzpicture}
 	\end{centering}
 
-	此时称该子串有长度为2的最大相等前后缀。
+	称"abcab"有长度为2的最大相等前后缀。这样，遇到不匹配的情况，不需要判断接下来的字符，而是直接跳转到已经匹配部分的下一个字符，让最大相等前后缀来决定此时模板的指针在何处。显然通过这样操作，\textbf{可以令每一个文本字符只被匹配一次}（已经匹配部分不会再次匹配 \sout{kmp也是线性筛}），时间复杂度为线性，这就是kmp的原理。
+
+	对模版进行预处理，每个前缀存储它的最大相等前后缀长度，设next[i]为模版的前i个字符的最大相同前后缀长度，此时有如下转移方程：
+
+\begin{equation}
+	\left\{
+		\begin{aligned}
+			&next[i] = next[i-1]+1, \ t_i = t_{next[i-1]} &\\
+			&next[i] = next[next[i-1]]+1, \ t_i = t_{next[next[i-1]]} &
+		\end{aligned}
+	\right.
+\end{equation}
+
+当最大相等前后缀可以延续时，下一个next加一；当无法延续时，尝试使用上一个最大相等前后缀A的最大相等前后缀B来延续（因为B仍是当前子串相等前后缀之一）。
+
+可写出如下伪代码：
+
+	
+
 	
 
 
